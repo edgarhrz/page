@@ -46,24 +46,25 @@ window.addEventListener('resize', ()=>{
 });
 
 // As the user scrolls, the active link should change based on the section currently displayed on the screen.
-window.addEventListener('scroll', ()=>{
-  const sections = document.querySelectorAll('#heroHeader, #services, #works, #contact');
+window.addEventListener('scroll', () => {
+  const sections = Array.from(document.querySelectorAll('#heroHeader, #services, #works, #contact'));
+  const scrollY = window.scrollY;
+  const NAV_BAR_HEIGHT = NAV_BAR.getBoundingClientRect().height;
 
-  // Loop through sections and check if they are visible
-  sections.forEach((section) => {
-    const sectionTop = section.offsetTop;
-    const NAV_BAR_HEIGHT = NAV_BAR.getBoundingClientRect().height;
-    if (window.scrollY >= sectionTop - NAV_BAR_HEIGHT) {
-      const ID = section.getAttribute('id');
-      const LINK = NAV_LINKS.filter(link => {
-        return link.href.includes('#'+ID);
-      })[0];
-      console.log(LINK);
-      currentActiveLink.classList.remove(ACTIVE_LINK_CLASS);
-      LINK.classList.add(ACTIVE_LINK_CLASS);
-      currentActiveLink = LINK;
+  // Recorrer en orden inverso para encontrar la sección actual
+  for (let i = sections.length - 1; i >= 0; i--) {
+    const sectionTop = sections[i].offsetTop - NAV_BAR_HEIGHT - 5; // margen pequeño para anticipar
+    if (scrollY >= sectionTop) {
+      const ID = sections[i].getAttribute('id');
+      const LINK = NAV_LINKS.find(link => link.href.includes('#' + ID));
+      if (LINK && currentActiveLink !== LINK) {
+        currentActiveLink.classList.remove(ACTIVE_LINK_CLASS);
+        LINK.classList.add(ACTIVE_LINK_CLASS);
+        currentActiveLink = LINK;
+      }
+      break; // Salimos al encontrar la sección correcta
     }
-  });
+  }
 });
 
 // Shows & hide navbar on smaller screen
