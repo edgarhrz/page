@@ -247,9 +247,7 @@ body {
     z-index: -1;
     display: none;
 }
-.header__right img{
-    width: 100%;
-}
+
 .header__sup-text{
     display: inline-flex;
     font-weight: 600;
@@ -569,6 +567,7 @@ body {
     .header__right{
         display: block;
         opacity: 0.3;
+        
     }
     .header__title{
         flex-direction: row;
