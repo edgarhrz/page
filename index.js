@@ -45,16 +45,19 @@ window.addEventListener('resize', ()=>{
   }
 });
 
-// As the user scrolls, the active link should change based on the section currently displayed on the screen.
 window.addEventListener('scroll', () => {
   const sections = Array.from(document.querySelectorAll('#heroHeader, #services, #works, #contact'));
   const scrollY = window.scrollY;
   const NAV_BAR_HEIGHT = NAV_BAR.getBoundingClientRect().height;
+  const windowHeight = window.innerHeight;
+  const docHeight = document.documentElement.scrollHeight;
 
-  // Recorrer en orden inverso para encontrar la sección actual
+  // Detectar si estamos cerca del final de la página
+  const nearBottom = (window.pageYOffset + windowHeight) >= (docHeight - 10);
+
   for (let i = sections.length - 1; i >= 0; i--) {
-    const sectionTop = sections[i].offsetTop - NAV_BAR_HEIGHT - 5; // margen pequeño para anticipar
-    if (scrollY >= sectionTop) {
+    const sectionTop = sections[i].offsetTop - NAV_BAR_HEIGHT - 5;
+    if (scrollY >= sectionTop || (nearBottom && i === sections.length -1)) {
       const ID = sections[i].getAttribute('id');
       const LINK = NAV_LINKS.find(link => link.href.includes('#' + ID));
       if (LINK && currentActiveLink !== LINK) {
@@ -62,7 +65,7 @@ window.addEventListener('scroll', () => {
         LINK.classList.add(ACTIVE_LINK_CLASS);
         currentActiveLink = LINK;
       }
-      break; // Salimos al encontrar la sección correcta
+      break;
     }
   }
 });
